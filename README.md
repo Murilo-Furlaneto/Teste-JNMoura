@@ -1,16 +1,8 @@
-# teste_jnmoura
+Projeto 'To Do List' em Flutter - Desenvolvedor
 
-A new Flutter project.
+Objetivo: Criar um aplicativo para controlar tarefas
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    Deve ser possível cadastrar e editar uma tarefa com uma breve descrição, sua data/hora e prioridade.
+    O sistema deve apresentar as tarefas em uma lista das tarefas, ordenando pela data e hora.
+    Deve ser possível também marcar uma tarefa como concluída, retirando-a da lista de tarefas a serem executadas.
+    Permitir consultar as tarefas por data e prioridade.
