@@ -25,46 +25,104 @@ mixin _$TarefaStore on TarefaStoreBase, Store {
     });
   }
 
-  late final _$TarefaStoreBaseActionController =
-      ActionController(name: 'TarefaStoreBase', context: context);
+  late final _$dataSelecionadaAtom =
+      Atom(name: 'TarefaStoreBase.dataSelecionada', context: context);
 
   @override
-  void mudarStatus(Tarefa tarefa) {
-    final _$actionInfo = _$TarefaStoreBaseActionController.startAction(
-        name: 'TarefaStoreBase.mudarStatus');
-    try {
-      return super.mudarStatus(tarefa);
-    } finally {
-      _$TarefaStoreBaseActionController.endAction(_$actionInfo);
-    }
+  DateTime? get dataSelecionada {
+    _$dataSelecionadaAtom.reportRead();
+    return super.dataSelecionada;
   }
 
   @override
-  void atualizarTarefa(Tarefa tarefa) {
-    final _$actionInfo = _$TarefaStoreBaseActionController.startAction(
-        name: 'TarefaStoreBase.atualizarTarefa');
-    try {
-      return super.atualizarTarefa(tarefa);
-    } finally {
-      _$TarefaStoreBaseActionController.endAction(_$actionInfo);
-    }
+  set dataSelecionada(DateTime? value) {
+    _$dataSelecionadaAtom.reportWrite(value, super.dataSelecionada, () {
+      super.dataSelecionada = value;
+    });
+  }
+
+  late final _$prioridadeSelecionadaAtom =
+      Atom(name: 'TarefaStoreBase.prioridadeSelecionada', context: context);
+
+  @override
+  Prioridade? get prioridadeSelecionada {
+    _$prioridadeSelecionadaAtom.reportRead();
+    return super.prioridadeSelecionada;
   }
 
   @override
-  void adicionarTarefa(Tarefa tarefa) {
-    final _$actionInfo = _$TarefaStoreBaseActionController.startAction(
-        name: 'TarefaStoreBase.adicionarTarefa');
-    try {
-      return super.adicionarTarefa(tarefa);
-    } finally {
-      _$TarefaStoreBaseActionController.endAction(_$actionInfo);
-    }
+  set prioridadeSelecionada(Prioridade? value) {
+    _$prioridadeSelecionadaAtom.reportWrite(value, super.prioridadeSelecionada,
+        () {
+      super.prioridadeSelecionada = value;
+    });
+  }
+
+  late final _$mudarStatusAsyncAction =
+      AsyncAction('TarefaStoreBase.mudarStatus', context: context);
+
+  @override
+  Future<void> mudarStatus(Tarefa tarefa) {
+    return _$mudarStatusAsyncAction.run(() => super.mudarStatus(tarefa));
+  }
+
+  late final _$atualizarTarefaAsyncAction =
+      AsyncAction('TarefaStoreBase.atualizarTarefa', context: context);
+
+  @override
+  Future<void> atualizarTarefa(Tarefa tarefa) {
+    return _$atualizarTarefaAsyncAction
+        .run(() => super.atualizarTarefa(tarefa));
+  }
+
+  late final _$adicionarTarefaAsyncAction =
+      AsyncAction('TarefaStoreBase.adicionarTarefa', context: context);
+
+  @override
+  Future<void> adicionarTarefa(Tarefa tarefa) {
+    return _$adicionarTarefaAsyncAction
+        .run(() => super.adicionarTarefa(tarefa));
+  }
+
+  late final _$filtrarPorDataAsyncAction =
+      AsyncAction('TarefaStoreBase.filtrarPorData', context: context);
+
+  @override
+  Future<void> filtrarPorData(DateTime data) {
+    return _$filtrarPorDataAsyncAction.run(() => super.filtrarPorData(data));
+  }
+
+  late final _$filtrarPorPrioridadeAsyncAction =
+      AsyncAction('TarefaStoreBase.filtrarPorPrioridade', context: context);
+
+  @override
+  Future<void> filtrarPorPrioridade(Prioridade prioridade) {
+    return _$filtrarPorPrioridadeAsyncAction
+        .run(() => super.filtrarPorPrioridade(prioridade));
+  }
+
+  late final _$carregarTarefasAsyncAction =
+      AsyncAction('TarefaStoreBase.carregarTarefas', context: context);
+
+  @override
+  Future<void> carregarTarefas() {
+    return _$carregarTarefasAsyncAction.run(() => super.carregarTarefas());
+  }
+
+  late final _$carregaListaAsyncAction =
+      AsyncAction('TarefaStoreBase.carregaLista', context: context);
+
+  @override
+  Future<void> carregaLista() {
+    return _$carregaListaAsyncAction.run(() => super.carregaLista());
   }
 
   @override
   String toString() {
     return '''
-tarefas: ${tarefas}
+tarefas: ${tarefas},
+dataSelecionada: ${dataSelecionada},
+prioridadeSelecionada: ${prioridadeSelecionada}
     ''';
   }
 }

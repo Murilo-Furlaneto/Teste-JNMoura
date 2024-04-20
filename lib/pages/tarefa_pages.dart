@@ -15,19 +15,26 @@ class TarefaPages extends StatefulWidget {
 
 class _TarefaPagesState extends State<TarefaPages> {
   final _tarefaStore = TarefaStore();
+  DateTime? _dataSelecionada;
 
   Future<void> _consultarPorData() async {
-    final DateTime? dataSelecionada = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2025),
-    );
+  final DateTime? dataSelecionada = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2020),
+    lastDate: DateTime(2025),
+  );
 
-    if (dataSelecionada != null) {
+  if (dataSelecionada != null) {
+    if (dataSelecionada == DateTime.now()) {
+      // Se a data selecionada for a data atual, exiba todas as tarefas
+      _tarefaStore.carregarTarefas();
+    } else {
       _tarefaStore.filtrarPorData(dataSelecionada);
     }
   }
+}
+
 
   Future<void> _consultarPorPrioridade() async {
     Prioridade? prioridadeSelecionada;
@@ -75,6 +82,13 @@ class _TarefaPagesState extends State<TarefaPages> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tarefaStore.carregarTarefas();
   }
 
   @override

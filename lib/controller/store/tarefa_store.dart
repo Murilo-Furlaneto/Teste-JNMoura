@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'package:mobx/mobx.dart';
+import 'package:teste_jnmoura/controller/database/database_service.dart';
 import 'package:teste_jnmoura/models/tarefa_models.dart';
 
 part 'tarefa_store.g.dart';
@@ -7,6 +7,8 @@ part 'tarefa_store.g.dart';
 class TarefaStore = TarefaStoreBase with _$TarefaStore;
 
 abstract class TarefaStoreBase with Store {
+  final DatabaseService _databaseService = DatabaseService();
+
   @observable
   ObservableList<Tarefa> tarefas = ObservableList<Tarefa>.of([]);
 
@@ -17,37 +19,54 @@ abstract class TarefaStoreBase with Store {
   Prioridade? prioridadeSelecionada;
 
   @action
-  void mudarStatus(Tarefa tarefa) {
+  Future<void> mudarStatus(Tarefa tarefa) async {
     tarefa.concluida = true;
     tarefas.remove(tarefa);
+    await _databaseService.updateTarefa(tarefa);
   }
 
   @action
-  void atualizarTarefa(Tarefa tarefa) {
+  Future<void> atualizarTarefa(Tarefa tarefa) async {
     final index = tarefas.indexWhere((element) => element.id == tarefa.id);
     if (index != -1) {
       tarefas[index] = tarefa;
+      await _databaseService.updateTarefa(tarefa);
     }
   }
 
   @action
-  void adicionarTarefa(Tarefa tarefa) {
+  Future<void> adicionarTarefa(Tarefa tarefa) async {
     tarefas.add(tarefa);
+    await _databaseService.insertTarefa(tarefa);
   }
 
   @action
-  void filtrarPorData(DateTime data) {
+  Future<void> filtrarPorData(DateTime data) async {
     dataSelecionada = data;
-    tarefas = ObservableList.of(tarefas.where((tarefa) =>
-        tarefa.data.year == data.year &&
-        tarefa.data.month == data.month &&
-        tarefa.data.day == data.day));
+    final todasAsTarefas = await _databaseService.getAllTarefas();
+    final filteredTarefas =
+        todasAsTarefas.where((tarefa) => tarefa.data == data).toList();
+    tarefas.clear();
+    tarefas.addAll(filteredTarefas);
   }
 
   @action
-  void filtrarPorPrioridade(Prioridade prioridade) {
+  Future<void> filtrarPorPrioridade(Prioridade prioridade) async {
     prioridadeSelecionada = prioridade;
     tarefas = ObservableList.of(
-        tarefas.where((tarefa) => tarefa.prioridade == prioridade));
+        await _databaseService.getTarefasPorPrioridade(prioridade));
+  }
+
+  // Método para carregar tarefas do banco de dados ao inicializar a store
+  @action
+  Future<void> carregarTarefas() async {
+    tarefas = ObservableList.of(await _databaseService.getAllTarefas());
+  }
+
+  @action
+  Future<void> carregaLista() async {
+    tarefas = ObservableList.of(await _databaseService.getAllTarefas())
+        .toList()
+        .asObservable();
   }
 }
